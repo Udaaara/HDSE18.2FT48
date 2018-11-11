@@ -1,0 +1,46 @@
+<?php
+if(isset($_POST["txtUN"]))
+{
+	//Accept form data
+	$un = $_POST["txtUser"];
+	$pw = $_POST["txtPWss"];
+	$type = $_POST["cmbType"];
+	
+	//Connect to DB
+	$con = mysqli_connect("127.0.0.1","","");
+	mysqli_select_db($con,"test");
+	$sql = "Select * from tbluser where uname='$un' and pword='$pw' and type='$type'";
+	$result = mysqli_query($con,$sql);
+	if($row = mysqli_fetch_array($result))
+	{
+		session_start();
+		$_SESSION["un"]=$un;
+		$_SESSION["tp"]=$type;
+		$_SESSION["LAT"]=time();
+		header("Location:welcome.php");
+	}
+	else
+	{
+		echo "Invalid Username or Password...";
+	}
+	mysqli_close($con);
+	
+}
+?>
+<html>
+<head><title>Login</title></head>
+<body>
+<center><form name="frmLogin" method="post" action="#">
+<h2>Username:<input type="text" name="txtUser" /><br /></h2> 
+<h2>Password:<input type="password" name="txtPWss" /><br /> </h2>
+Type:<select name="cmbType">
+	<option value="admin">Woner</option>
+    <option value="user">Employee</option>
+	</select><br /> 
+    <input type="submit" name="btnSubmit" value="Login" />
+    <input type="reset" name="btnReset" value="Delete" />
+</form>
+</center>
+</body>
+</body>
+</html>
